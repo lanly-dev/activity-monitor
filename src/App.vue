@@ -1,9 +1,9 @@
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+<script lang='ts'>
+import { Options, Vue } from 'vue-class-component'
 import { Doughnut } from 'vue-chartjs'
 import os from 'os'
 
-@Component({
+@Options({
   extends: Doughnut,
   data () {
     return {
@@ -33,10 +33,10 @@ import os from 'os'
       lastMeasureTimes: []
     }
   },
-  mounted () {
+  beforeMount () {
+    this.renderChart(this.chartData, this.options)
     this.getDatasets()
     this.setLastMeasureTimes(os.cpus())
-    this.renderChart(this.chartData, this.options)
     setInterval(this.updateDatasets, 2000)
   },
   methods: {
@@ -59,7 +59,7 @@ import os from 'os'
       // testCpus = os.cpus()
       this.chartData.datasets = datasets
     },
-    setLastMeasureTimes (cpus) {
+    setLastMeasureTimes (cpus: string|unknown[]) {
       for (let i = 0; i < cpus.length; i++) {
         this.lastMeasureTimes[i] = this.getCpuTimes(cpus[i])
       }
@@ -76,7 +76,8 @@ import os from 'os'
       this.$data._chart.update()
       this.setLastMeasureTimes(cpus)
     },
-    getCpuTimes (cpu) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getCpuTimes (cpu: { times: { user: any; sys: any; idle: any } }) {
       return [cpu.times.user, cpu.times.sys, cpu.times.idle]
     }
   }
