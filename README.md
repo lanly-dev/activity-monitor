@@ -24,3 +24,4 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Recreate from https://github.com/electron/simple-samples/tree/master/activity-monitor
+![screen.gif](./screen.gif)
